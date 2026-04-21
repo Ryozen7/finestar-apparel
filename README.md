@@ -56,40 +56,6 @@ npm install -D @testing-library/react @testing-library/jest-dom @testing-library
 
 ---
 
-### Jest Configuration
-
-Create `jest.config.cjs`:
-
-```js
-module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
-  moduleNameMapper: {
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-  },
-  collectCoverage: true,
-  collectCoverageFrom: [
-    "src/components/**/*.{ts,tsx}",
-    "src/pages/**/*.{ts,tsx}",
-  ],
-  coverageDirectory: "coverage",
-  coverageReporters: ["text", "lcov"],
-};
-```
-
----
-
-### Setup file
-
-Create `src/setupTests.ts`:
-
-```ts
-import "@testing-library/jest-dom";
-```
-
----
-
 ### Run tests
 
 ```sh
@@ -109,7 +75,7 @@ npm test:coverage
 ## Design Decisions
 
 ### State Shape
-- Redux Toolkit used for global state management (cart, products, menu, theme)
+- Redux Toolkit used for global state management (cart, products, theme)
 - cart: `{ items: CartItem[] }`
 - products: `{ items, status, error }`
 - theme: `{ darkMode: boolean }`
@@ -142,8 +108,7 @@ npm test:coverage
 - No authentication
 - No real payments
 - Limited product dataset
-- PDF generation is client-side only
-- The Ionic UI implementation is basic and may not fully leverage advanced Ionic theming, transitions, or mobile best practices due to limited experience with the framework.
+- The Ionic UI implementation is basic and may not fully leverage advanced Ionic theming, transitions, or mobile best practices due to limited experience with the framework. (checkout to branch feat-ionic-extension to see implementation)
 
 ---
 
