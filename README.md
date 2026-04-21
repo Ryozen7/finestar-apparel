@@ -1,63 +1,65 @@
-# React + TypeScript + Vite
+# Finestar Apparel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern e-commerce demo app built with React, TypeScript, Redux Toolkit, and MirageJS.
 
-Currently, two official plugins are available:
+## Setup Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. **Clone the repository**
+   ```sh
+   git clone <repo-url>
+   cd finestar-apparel
+   ```
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
+3. **Start the development server**
+   ```sh
+   npm run dev
+   ```
+   The app will be available at http://localhost:5173 (or as shown in your terminal).
 
-## React Compiler
+4. **Run type checking and formatting**
+   ```sh
+   npm run test:tsc   # TypeScript build check
+   npm run format     # Prettier formatting
+   ```
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Design Decisions
 
-Note: This will impact Vite dev & build performances.
+### State Shape
+- **Redux Toolkit** is used for global state management (cart, products, menu, theme).
+- **cart**: `{ items: CartItem[] }` — Each item includes product, variant, and quantity.
+- **products**: `{ items: Product[], status, error }` — Normalized for easy lookup.
+- **theme**: `{ darkMode: boolean }` — Simple toggle for dark mode.
 
-## Expanding the ESLint configuration
+### Component Structure
+- **App.tsx**: Main layout and routing.
+- **components/**: Reusable UI (Button, Input, ProductItem, Cart, Checkout, NavBar, ProductSearch, etc).
+- **pages/**: Route-level containers (Home, CartPage, CheckoutPage).
+- **redux/**: Slices for cart, products, menu, theme; API logic in `api/`.
+- **utils/**: Helpers (discounts, PDF download).
+- **MirageJS**: Mocks API endpoints for products and cart.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Trade-offs
+- **MirageJS** for local API mocking: Fast dev setup, but not production-ready.
+- **Single Redux store**: Simpler, but may not scale for very large apps.
+- **Debounced search**: Improves UX, but may delay fast typists.
+- **Minimal error handling**: Focused on demo, not all edge cases covered.
+- **No authentication**: Demo only, not suitable for real commerce.
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+## Known Limitations
+- No backend or persistent database (all data is in-memory or localStorage).
+- No user authentication or order history.
+- No payment integration (checkout is simulated only).
+- Limited product catalog (mock data only).
+- Minimal accessibility and mobile responsiveness.
+- Error handling is basic; not all edge cases are covered.
+- PDF receipt is generated client-side and may not be pixel-perfect.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+For questions or suggestions, please open an issue or contact the maintainer.
       // Enable lint rules for React
       reactX.configs["recommended-typescript"],
       // Enable lint rules for React DOM
