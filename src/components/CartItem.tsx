@@ -1,15 +1,26 @@
-import React from 'react';
-import Button from './Button';
-import '../styles/Button.css';
-import type { CartItem as CartItemType } from '../types';
+import React from "react";
+import Button from "./Button";
+import "../styles/Button.css";
+import type { CartItem as CartItemType } from "../types";
 
 interface CartItemProps {
   item: CartItemType;
-  onRemove: (productId: string, variant: { size: string; color: string }) => void;
-  onQuantityChange: (productId: string, variant: { size: string; color: string }, quantity: number) => void;
+  onRemove: (
+    productId: string,
+    variant: { size: string; color: string },
+  ) => void;
+  onQuantityChange: (
+    productId: string,
+    variant: { size: string; color: string },
+    quantity: number,
+  ) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, onRemove, onQuantityChange }) => {
+const CartItem: React.FC<CartItemProps> = ({
+  item,
+  onRemove,
+  onQuantityChange,
+}) => {
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const quantity = parseInt(event.target.value);
     onQuantityChange(item.productId, item.variant, quantity);
@@ -25,7 +36,12 @@ const CartItem: React.FC<CartItemProps> = ({ item, onRemove, onQuantityChange })
         min="1"
         onChange={handleQuantityChange}
       />
-      <Button variant="outline" onClick={() => onRemove(item.productId, item.variant)}>Remove</Button>
+      <Button
+        variant="outline"
+        onClick={() => onRemove(item.productId, item.variant)}
+      >
+        Remove
+      </Button>
     </div>
   );
 };

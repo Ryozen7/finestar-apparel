@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaUserCircle, FaBars, FaSun, FaMoon } from 'react-icons/fa';
-import '../styles/NavBar.css';
-import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../store';
-import { toggleTheme } from '../redux/slices/themeSlice';
-import Button from './Button';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  FaShoppingCart,
+  FaUserCircle,
+  FaBars,
+  FaSun,
+  FaMoon,
+} from "react-icons/fa";
+import "../styles/NavBar.css";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../store";
+import { toggleTheme } from "../redux/slices/themeSlice";
+import Button from "./Button";
 
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,7 +19,9 @@ const NavBar: React.FC = () => {
   const dispatch = useDispatch();
   const handleToggleTheme = () => dispatch(toggleTheme());
   const isSignedIn = false; // Replace with real auth logic
-  const cartCount = useSelector((state: RootState) => state.cart.items.reduce((sum, item) => sum + item.quantity, 0));
+  const cartCount = useSelector((state: RootState) =>
+    state.cart.items.reduce((sum, item) => sum + item.quantity, 0),
+  );
 
   const handleToggleMenu = () => setMenuOpen((open) => !open);
 
@@ -21,32 +29,48 @@ const NavBar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/" className="navbar-logo" aria-label="Home">
-          <img src="/logo.png" alt="FineStar Apparel Logo" style={{ height: 40, width: 'auto', display: 'block' }} />
+          <img
+            src="/logo.png"
+            alt="FineStar Apparel Logo"
+            style={{ height: 40, width: "auto", display: "block" }}
+          />
         </Link>
       </div>
       <div className="navbar-right">
         <Link to="/cart" className="navbar-cart" title="Cart">
           <FaShoppingCart size={22} />
-          {cartCount > 0 && (
-            <span>{cartCount}</span>
-          )}
+          {cartCount > 0 && <span>{cartCount}</span>}
         </Link>
-        <Button className="navbar-hamburger" variant="outline" onClick={handleToggleMenu} aria-label="Menu">
+        <Button
+          className="navbar-hamburger"
+          variant="outline"
+          onClick={handleToggleMenu}
+          aria-label="Menu"
+        >
           <FaBars size={22} />
         </Button>
         {menuOpen && (
           <div className="navbar-menu">
-            <Button className="navbar-theme" variant="outline" onClick={handleToggleTheme} aria-label="Toggle theme">
+            <Button
+              className="navbar-theme"
+              variant="outline"
+              onClick={handleToggleTheme}
+              aria-label="Toggle theme"
+            >
               {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
-              {darkMode ? ' Light Mode' : ' Dark Mode'}
+              {darkMode ? " Light Mode" : " Dark Mode"}
             </Button>
             <Link to="/profile" className="navbar-menu-item">
               <FaUserCircle size={18} /> Profile
             </Link>
             {isSignedIn ? (
-              <Button className="navbar-menu-item" variant="secondary">Sign Out</Button>
+              <Button className="navbar-menu-item" variant="secondary">
+                Sign Out
+              </Button>
             ) : (
-              <Button className="navbar-menu-item" variant="primary">Sign In</Button>
+              <Button className="navbar-menu-item" variant="primary">
+                Sign In
+              </Button>
             )}
           </div>
         )}

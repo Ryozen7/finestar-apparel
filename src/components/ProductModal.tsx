@@ -1,7 +1,7 @@
-import React from 'react';
-import '../styles/ProductModal.css';
-import Button from './Button';
-import type { Product, ProductVariant } from '../types';
+import React from "react";
+import "../styles/ProductModal.css";
+import Button from "./Button";
+import type { Product, ProductVariant } from "../types";
 
 interface ProductModalProps {
   product: Product;
@@ -11,8 +11,15 @@ interface ProductModalProps {
   loading: boolean;
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onAdd, loading }) => {
-  const [selectedVariant, setSelectedVariant] = React.useState<ProductVariant | null>(null);
+const ProductModal: React.FC<ProductModalProps> = ({
+  product,
+  open,
+  onClose,
+  onAdd,
+  loading,
+}) => {
+  const [selectedVariant, setSelectedVariant] =
+    React.useState<ProductVariant | null>(null);
 
   React.useEffect(() => {
     if (open) setSelectedVariant(product.variants[0] || null);
@@ -36,22 +43,40 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onA
           <select
             id="variant-select"
             className="variant-select"
-            value={selectedVariant ? `${selectedVariant.size}|${selectedVariant.color}` : ''}
-            onChange={e => {
-              const [size, color] = e.target.value.split('|');
-              setSelectedVariant(product.variants.find(v => v.size === size && v.color === color) || null);
+            value={
+              selectedVariant
+                ? `${selectedVariant.size}|${selectedVariant.color}`
+                : ""
+            }
+            onChange={(e) => {
+              const [size, color] = e.target.value.split("|");
+              setSelectedVariant(
+                product.variants.find(
+                  (v) => v.size === size && v.color === color,
+                ) || null,
+              );
             }}
           >
             {product.variants.map((variant, idx) => (
               <option key={idx} value={`${variant.size}|${variant.color}`}>
-                Size: {variant.size}, Color: {variant.color} — ${variant.price.toFixed(2)}
+                Size: {variant.size}, Color: {variant.color} — $
+                {variant.price.toFixed(2)}
               </option>
             ))}
           </select>
         </div>
         <div className="modal-actions">
-          <Button variant="primary" onClick={() => selectedVariant && onAdd(selectedVariant)} disabled={!selectedVariant} loading={loading}>Add to Cart</Button>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button
+            variant="primary"
+            onClick={() => selectedVariant && onAdd(selectedVariant)}
+            disabled={!selectedVariant}
+            loading={loading}
+          >
+            Add to Cart
+          </Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
         </div>
       </div>
     </div>

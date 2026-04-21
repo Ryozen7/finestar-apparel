@@ -1,15 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import productsReducer from './redux/slices/productsSlice';
-import cartReducer from './redux/slices/cartSlice';
-import themeReducer from './redux/slices/themeSlice';
-import menuReducer from './redux/slices/menuSlice';
-
+import productsReducer from "./redux/slices/productsSlice";
+import cartReducer from "./redux/slices/cartSlice";
+import themeReducer from "./redux/slices/themeSlice";
+import menuReducer from "./redux/slices/menuSlice";
 
 // Load cart from localStorage
 function loadCartState() {
   try {
-    const serialized = localStorage.getItem('cart');
+    const serialized = localStorage.getItem("cart");
     if (!serialized) return undefined;
     return { cart: { items: JSON.parse(serialized) } };
   } catch {
@@ -31,7 +30,7 @@ const store = configureStore({
 store.subscribe(() => {
   try {
     const state = store.getState();
-    localStorage.setItem('cart', JSON.stringify(state.cart.items));
+    localStorage.setItem("cart", JSON.stringify(state.cart.items));
   } catch {}
 });
 

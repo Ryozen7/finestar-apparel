@@ -11,12 +11,14 @@
   border-radius: 12px;
   margin: 2rem 0;
   padding: 2rem 2rem 1.5rem 2rem;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
   border: 1px solid var(--border-color);
-  transition: box-shadow 0.18s, border 0.18s;
+  transition:
+    box-shadow 0.18s,
+    border 0.18s;
 }
 .cart-product-card:hover {
-  box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.12);
   border-color: var(--primary);
 }
 
@@ -37,14 +39,16 @@
   padding: 1.25rem 1rem 1rem 1rem;
   min-width: 200px;
   background: #f8fafc;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
   margin-bottom: 0.5rem;
-  transition: border 0.18s, box-shadow 0.18s;
+  transition:
+    border 0.18s,
+    box-shadow 0.18s;
 }
 .cart-product-variant:focus-within,
 .cart-product-variant:hover {
   border-color: var(--primary);
-  box-shadow: 0 2px 12px rgba(72,202,228,0.08);
+  box-shadow: 0 2px 12px rgba(72, 202, 228, 0.08);
 }
 
 .cart-product-variant label {
@@ -81,7 +85,7 @@
   right: 0;
   bottom: 0;
   background: var(--surface);
-  box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
   padding: 1.25rem 0;
   display: flex;
   justify-content: center;
