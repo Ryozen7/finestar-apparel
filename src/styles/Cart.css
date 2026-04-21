@@ -60,6 +60,23 @@
   transition:
     border 0.18s,
     box-shadow 0.18s;
+  .cart-product-variant {
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem 1rem 1rem 1rem;
+    min-width: 200px;
+    background: var(--background);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.03);
+    margin-bottom: 0.5rem;
+    transition:
+      box-shadow 0.15s,
+      border 0.15s,
+      background 0.15s;
+  }
+  body.dark-mode .cart-product-variant {
+    background: var(--background);
+    border-color: var(--border-color);
+  }
 }
 .cart-product-variant:focus-within,
 .cart-product-variant:hover {

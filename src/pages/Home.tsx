@@ -5,7 +5,6 @@ const Home: React.FC = () => {
   return (
     <div className="container">
       <section className="hero">
-        <h1>Welcome to Fine Cloth Store</h1>
         <p className="hero-subtitle">
           Discover premium apparel for every style. Enjoy exclusive deals and a
           seamless shopping experience!
