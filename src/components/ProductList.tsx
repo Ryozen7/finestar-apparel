@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ProductItem from './ProductItem';
-import type { Product } from '../types';
+import type { Product, ProductVariant } from '../types';
+import { useDispatch } from 'react-redux';
+import { saveCartThunk } from '../redux/slices/cartSlice';
+import { useSelector } from 'react-redux';
 
 const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -9,6 +12,9 @@ const ProductList: React.FC = () => {
     const [search, setSearch] = useState('');
     const [sortBy, setSortBy] = useState<'name' | 'price' | 'category'>('name');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state: any) => state.cart.items);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -41,9 +47,18 @@ const ProductList: React.FC = () => {
         return <div>Error: {error}</div>;
     }
 
-    const onAddToCart = (product: Product) => {
-        // TODO: Implement add to cart logic (dispatch action, etc.)
-        console.log('Add to cart:', product);
+    const onAddToCart = (product: Product, variant: ProductVariant) => {
+        // Clone product and override price with variant price for cart
+        const productWithVariantPrice = { ...product, price: variant.price };
+        // Check if item exists
+        const idx = cartItems.findIndex((item: any) => item.productId === product.id && item.variant.size === variant.size && item.variant.color === variant.color);
+        let newCart;
+        if (idx !== -1) {
+            newCart = cartItems.map((item: any, i: number) => i === idx ? { ...item, quantity: item.quantity + 1 } : item);
+        } else {
+            newCart = [...cartItems, { productId: product.id, variant, quantity: 1, product: productWithVariantPrice }];
+        }
+        dispatch(saveCartThunk(newCart));
     };
 
 

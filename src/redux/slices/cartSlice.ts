@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { CartItem, ProductVariant } from '../../types';
+import { fetchCart, saveCart, clearCartApi } from '../api/cartApi';
 
 export interface CartState {
   items: CartItem[];
@@ -9,6 +9,22 @@ export interface CartState {
 const initialState: CartState = {
   items: [],
 };
+
+export const fetchCartThunk = createAsyncThunk('cart/fetchCart', async () => {
+  const data = await fetchCart();
+  // If using a single cart with id '1', data.items is the array
+  return data.items || [];
+});
+
+export const saveCartThunk = createAsyncThunk('cart/saveCart', async (items: CartItem[]) => {
+  await saveCart(items);
+  return items;
+});
+
+export const clearCartThunk = createAsyncThunk('cart/clearCart', async () => {
+  await clearCartApi();
+  return [];
+});
 
 function findCartItemIndex(items: CartItem[], productId: string, variant: ProductVariant) {
   return items.findIndex(
@@ -22,42 +38,20 @@ function findCartItemIndex(items: CartItem[], productId: string, variant: Produc
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {
-    addToCart: (
-      state,
-      action: PayloadAction<{ productId: string; variant: ProductVariant; quantity: number; product: any }>
-    ) => {
-      const { productId, variant, quantity, product } = action.payload;
-      const idx = findCartItemIndex(state.items, productId, variant);
-      if (idx !== -1) {
-        state.items[idx].quantity += quantity;
-      } else {
-        state.items.push({ productId, variant, quantity, product });
-      }
-    },
-    removeFromCart: (state, action: PayloadAction<{ productId: string; variant: ProductVariant }>) => {
-      state.items = state.items.filter(
-        (item) =>
-          !(item.productId === action.payload.productId &&
-            item.variant.size === action.payload.variant.size &&
-            item.variant.color === action.payload.variant.color)
-      );
-    },
-    updateQuantity: (
-      state,
-      action: PayloadAction<{ productId: string; variant: ProductVariant; quantity: number }>
-    ) => {
-      const { productId, variant, quantity } = action.payload;
-      const idx = findCartItemIndex(state.items, productId, variant);
-      if (idx !== -1) {
-        state.items[idx].quantity = quantity;
-      }
-    },
-    clearCart: (state) => {
-      state.items = [];
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartThunk.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
+      .addCase(saveCartThunk.fulfilled, (state, action) => {
+        state.items = action.payload;
+      })
+      .addCase(clearCartThunk.fulfilled, (state) => {
+        state.items = [];
+      });
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;
+// export { saveCartThunk, fetchCartThunk, clearCartThunk }; // Removed duplicate export to fix redeclaration error
 export default cartSlice.reducer;

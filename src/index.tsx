@@ -15,34 +15,34 @@ new Server({
       {
         id: '1',
         name: 'Classic White Shirt',
-        price: 39.99,
+        price: 34.99, // default price is the smallest variant
         category: 'Shirts',
         variants: [
-          { size: 'S', color: 'White' },
-          { size: 'M', color: 'White' },
-          { size: 'L', color: 'White' }
+          { size: 'S', color: 'White', price: 34.99 },
+          { size: 'M', color: 'White', price: 39.99 },
+          { size: 'L', color: 'White', price: 44.99 }
         ],
         image: '',
       },
       {
         id: '2',
         name: 'Slim Fit Jeans',
-        price: 59.99,
+        price: 54.99,
         category: 'Pants',
         variants: [
-          { size: '32', color: 'Blue' },
-          { size: '34', color: 'Blue' }
+          { size: '32', color: 'Blue', price: 54.99 },
+          { size: '34', color: 'Blue', price: 59.99 }
         ],
         image: '',
       },
       {
         id: '3',
         name: 'Summer Dress',
-        price: 49.99,
+        price: 44.99,
         category: 'Dresses',
         variants: [
-          { size: 'S', color: 'Red' },
-          { size: 'M', color: 'Red' }
+          { size: 'S', color: 'Red', price: 44.99 },
+          { size: 'M', color: 'Red', price: 49.99 }
         ],
         image: '',
       }

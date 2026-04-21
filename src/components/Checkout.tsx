@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../store';
-
-import { clearCart } from '../redux/slices/cartSlice';
-
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import './Button.css';
-import { applyDiscount } from '../utils/discounts';
 
 const Checkout: React.FC = () => {
-    const cartItems = useSelector((state: RootState) => state.cart.items);
-    // If discountCode is not in state, use local state
-    const [discountCode, setDiscountCode] = useState('');
-    const dispatch = useDispatch();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { cartItems = [], subtotal = 0 } = location.state || {};
+    const [promo, setPromo] = useState('');
+    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [timestamp, setTimestamp] = useState('');
 
-    const subtotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
-    const total = applyDiscount(subtotal, discountCode);
+    const discount = promo.trim().toUpperCase() === 'SAVE10' ? 0.1 * subtotal : 0;
+    const finalTotal = subtotal - discount;
 
-    const handleCompletePurchase = () => {
-        alert('Purchase complete!');
-        dispatch(clearCart());
+    const handlePlaceOrder = () => {
+        setOrderPlaced(true);
+        setTimestamp(new Date().toLocaleString());
     };
+
+    if (orderPlaced) {
+        return (
+            <div className="checkout-receipt" style={{ background: 'var(--surface)', borderRadius: 8, padding: 24, margin: '2rem auto', maxWidth: 420, boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }}>
+                <h2>Order Receipt</h2>
+                <div>Date: {timestamp}</div>
+                <div>Total: ${subtotal.toFixed(2)}</div>
+                <div>Discount: -${discount.toFixed(2)}</div>
+                <div><b>Final Total: ${finalTotal.toFixed(2)}</b></div>
+                <Button variant="primary" style={{ marginTop: 24 }} onClick={() => navigate('/')}>Back to Store</Button>
+            </div>
+        );
+    }
 
     return (
         <div className="checkout">
@@ -28,26 +38,29 @@ const Checkout: React.FC = () => {
             <div className="checkout-summary">
                 <h3>Order Summary</h3>
                 <ul>
-                    {cartItems.map((item, idx) => (
+                    {cartItems.map((item: any, idx: number) => (
                         <li key={item.product.id + '-' + idx}>
-                            {item.product.name} - ${item.product.price} x {item.quantity}
+                            {item.product.name} (Size: {item.variant.size}, Color: {item.variant.color}) - ${item.product.price} x {item.quantity}
                         </li>
                     ))}
                 </ul>
                 <p>Subtotal: ${subtotal.toFixed(2)}</p>
-                <div>
-                    <label htmlFor="discount">Promo Code: </label>
+                <div style={{ margin: '12px 0' }}>
                     <input
-                        id="discount"
                         type="text"
-                        value={discountCode}
-                        onChange={e => setDiscountCode(e.target.value)}
-                        placeholder="Enter code (e.g. SAVE10)"
+                        placeholder="Promo code"
+                        value={promo}
+                        onChange={e => setPromo(e.target.value)}
+                        style={{ padding: 8, minWidth: 120, marginRight: 8 }}
                     />
+                    <span style={{ color: discount > 0 ? 'green' : 'inherit' }}>
+                        {discount > 0 ? 'Promo applied: SAVE10 (-10%)' : 'Enter SAVE10 for 10% off'}
+                    </span>
                 </div>
-                <p>Total after discount: ${total.toFixed(2)}</p>
+                <div style={{ fontWeight: 500, margin: '8px 0' }}>Discount: -${discount.toFixed(2)}</div>
+                <p style={{ fontWeight: 700 }}>Final Total: ${finalTotal.toFixed(2)}</p>
             </div>
-            <Button variant="primary" onClick={handleCompletePurchase}>Complete Purchase</Button>
+            <Button variant="primary" onClick={handlePlaceOrder}>Place Order</Button>
         </div>
     );
 };

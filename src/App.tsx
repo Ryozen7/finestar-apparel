@@ -1,18 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from './store';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import NavBar from './components/NavBar';
+import { fetchCartThunk } from './redux/slices/cartSlice';
 
 const App: React.FC = () => {
   const darkMode = useSelector((state: RootState) => state.theme.darkMode);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     document.body.className = darkMode ? 'dark-mode' : '';
   }, [darkMode]);
+
+  React.useEffect(() => {
+    dispatch(fetchCartThunk());
+  }, [dispatch]);
 
   return (
     <Router>
