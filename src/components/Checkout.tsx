@@ -8,6 +8,7 @@ import Input from "./Input";
 import "../styles/Checkout.css";
 import { downloadReceiptPDF } from "../utils/downloadReceiptPDF";
 import { toast } from "sonner";
+import type { CartItem } from "../types";
 
 const Checkout: React.FC = () => {
   const location = useLocation();
@@ -66,7 +67,7 @@ const Checkout: React.FC = () => {
               subtotal,
               discount,
               finalTotal,
-              items: cartItems.map((item: any) => ({
+              items: cartItems.map((item: CartItem) => ({
                 name: item.product.name,
                 size: item.variant.size,
                 color: item.variant.color,
@@ -90,7 +91,7 @@ const Checkout: React.FC = () => {
       <div className="checkout-summary">
         <h3>Order Summary</h3>
         <ul>
-          {cartItems.map((item: any, idx: number) => (
+          {cartItems.map((item: CartItem, idx: number) => (
             <li key={item.product.id + "-" + idx}>
               {item.product.name} (Size: {item.variant.size}, Color:{" "}
               {item.variant.color}) - ${item.product.price} x {item.quantity}

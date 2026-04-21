@@ -1,4 +1,4 @@
-import { type FC, useState, useMemo, useCallback } from "react";
+import { type FC, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
@@ -46,13 +46,6 @@ const Cart: FC = () => {
     setLoadingItem(null);
   }, [cartItems, dispatch]);
 
-  const [showReceipt, setShowReceipt] = useState(false);
-  const [receipt, setReceipt] = useState<{
-    total: number;
-    discount: number;
-    final: number;
-    timestamp: string;
-  } | null>(null);
   const navigate = useNavigate();
 
   const calculateSubtotal = useCallback(() => {
@@ -87,23 +80,7 @@ const Cart: FC = () => {
 
   return (
     <div className="cart">
-      {showReceipt && receipt ? (
-        <div className="receipt">
-          <h2>Receipt</h2>
-          <div>Date: {receipt.timestamp}</div>
-          <div>Total: ${receipt.total.toFixed(2)}</div>
-          <div>Discount: -${receipt.discount.toFixed(2)}</div>
-          <div>
-            <b>Final Total: ${receipt.final.toFixed(2)}</b>
-          </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowReceipt(false)}
-          >
-            Back to Store
-          </button>
-        </div>
-      ) : cartItems.length === 0 ? (
+      {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Input from "./Input";
 
 interface ProductSearchProps {
@@ -10,13 +10,21 @@ interface ProductSearchProps {
 const ProductSearch: React.FC<ProductSearchProps> = ({ value, onChange, loading }) => {
   const [inputValue, setInputValue] = useState(value);
 
-  // Debounce input changes
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      onChange(inputValue);
+
+  // Debounce with useCallback
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const debouncedOnChange = useCallback((val: string) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onChange(val);
     }, 400);
-    return () => clearTimeout(handler);
-  }, [inputValue, onChange]);
+  }, [onChange]);
+
+  useEffect(() => {
+    debouncedOnChange(inputValue);
+    // Only run when inputValue changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue]);
 
   useEffect(() => {
     setInputValue(value);

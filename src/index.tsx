@@ -18,12 +18,12 @@ new Server({
       } catch {}
       return { id: "1", items: [] };
     }
-    function saveCart(cart: { id: string; items: any[] }) {
+    function saveCart(cart: { id: string; items: unknown[] }) {
       try {
         localStorage.setItem("mirage_cart", JSON.stringify(cart));
       } catch {}
     }
-    let cart = loadCart();
+    let cart: { id: string; items: unknown[] } = loadCart();
 
     this.get("/products", () => mockProducts);
 
@@ -34,7 +34,7 @@ new Server({
     });
 
     // POST /api/cart (replace items)
-    this.post("/cart", (schema, request) => {
+    this.post("/cart", (_, request) => {
       const attrs = JSON.parse(request.requestBody);
       if (!Array.isArray(attrs.items)) {
         return new Response(400, {}, { error: "Items must be an array" });

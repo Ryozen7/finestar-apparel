@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import ProductSearch from "./ProductSearch";
 import ProductItem from "./ProductItem";
-import type { Product, ProductVariant } from "../types";
+import type { CartItem, Product, ProductVariant } from "../types";
 import "../styles/ProductList.css";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store";
@@ -18,7 +18,7 @@ const ProductList: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const dispatch = useDispatch<AppDispatch>();
-  const cartItems = useSelector((state: any) => state.cart.items);
+  const cartItems = useSelector((state: { cart: { items: CartItem[] } }) => state.cart.items);
 
 
   useEffect(() => {
@@ -49,14 +49,14 @@ const ProductList: React.FC = () => {
     const productWithVariantPrice = { ...product, price: variant.price };
     // Check if item exists
     const idx = cartItems.findIndex(
-      (item: any) =>
+      (item: CartItem) =>
         item.productId === product.id &&
         item.variant.size === variant.size &&
         item.variant.color === variant.color,
     );
     let newCart;
     if (idx !== -1) {
-      newCart = cartItems.map((item: any, i: number) =>
+      newCart = cartItems.map((item: CartItem, i: number) =>
         i === idx ? { ...item, quantity: item.quantity + 1 } : item,
       );
     } else {
