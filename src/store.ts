@@ -3,7 +3,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import productsReducer from "./redux/slices/productsSlice";
 import cartReducer from "./redux/slices/cartSlice";
 import themeReducer from "./redux/slices/themeSlice";
-import menuReducer from "./redux/slices/menuSlice";
 
 // Load cart from localStorage
 function loadCartState() {
@@ -21,7 +20,6 @@ const store = configureStore({
     products: productsReducer,
     cart: cartReducer,
     theme: themeReducer,
-    menu: menuReducer,
   },
   preloadedState: loadCartState(),
 });

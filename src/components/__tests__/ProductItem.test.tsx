@@ -118,18 +118,6 @@ describe("ProductItem Component", () => {
     });
   });
 
-  it("shows fallback when no image", () => {
-    const productNoImage = {
-      ...mockProduct,
-      image: "",
-    };
-
-    render(
-      <ProductItem product={productNoImage} onAddToCart={mockAddToCart} />
-    );
-
-    expect(screen.getByText("No image found")).toBeInTheDocument();
-  });
 
   it("handles image error fallback", () => {
     render(

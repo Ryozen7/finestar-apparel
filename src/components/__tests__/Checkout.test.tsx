@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import Checkout from "../Checkout";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -85,12 +85,13 @@ describe("Checkout Component", () => {
 
     render(<Checkout />);
 
-    const button = screen.getByText("Place Order");
+    act(() => {
+      fireEvent.click(screen.getByText("Place Order"));
+    });
 
-    fireEvent.click(button);
-
-    // fast-forward timeout
-    jest.advanceTimersByTime(1000);
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+    });
 
     await waitFor(() => {
       expect(screen.getByText("Order Receipt")).toBeInTheDocument();
@@ -110,14 +111,20 @@ describe("Checkout Component", () => {
 
     render(<Checkout />);
 
-    fireEvent.click(screen.getByText("Place Order"));
-    jest.advanceTimersByTime(1000);
+    act(() => {
+      fireEvent.click(screen.getByText("Place Order"));
+    });
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+    });
 
     await waitFor(() =>
       screen.getByText("Download PDF")
     );
 
-    fireEvent.click(screen.getByText("Download PDF"));
+    act(() => {
+      fireEvent.click(screen.getByText("Download PDF"));
+    });
 
     expect(downloadReceiptPDF).toHaveBeenCalled();
 
@@ -130,14 +137,21 @@ describe("Checkout Component", () => {
 
     render(<Checkout />);
 
-    fireEvent.click(screen.getByText("Place Order"));
+    act(() => {
+      fireEvent.click(screen.getByText("Place Order"));
+    });
+
+    await act(async () => {
     jest.advanceTimersByTime(1000);
+    });
 
     await waitFor(() =>
       screen.getByText("Back to Store")
     );
 
-    fireEvent.click(screen.getByText("Back to Store"));
+    act(() => {
+      fireEvent.click(screen.getByText("Back to Store"));
+    });
 
     expect(mockNavigate).toHaveBeenCalledWith("/");
 
@@ -147,9 +161,11 @@ describe("Checkout Component", () => {
   it("shows loading state", () => {
     render(<Checkout />);
 
-    const button = screen.getByText("Place Order");
 
-    fireEvent.click(button);
+    act(() => { 
+      const button = screen.getByText("Place Order");
+      fireEvent.click(button);
+    });
 
     expect(screen.getByText("Placing Order...")).toBeInTheDocument();
   });

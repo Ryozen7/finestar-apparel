@@ -3,6 +3,7 @@ import Cart from "../Cart";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveCartThunk } from "../../redux/slices/cartSlice";
+import { act } from "react";
 
 // mocks
 jest.mock("react-redux", () => ({
@@ -97,7 +98,9 @@ describe("Cart Component", () => {
 
     fireEvent.click(checkoutBtn);
 
-    jest.advanceTimersByTime(600);
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith("/checkout", {

@@ -1,9 +1,19 @@
-import { render, screen } from '@testing-library/react';
-import Home from '../Home';
+import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
+import store  from "../../store";
+import Home from "../Home";
 
-describe('Home Page', () => {
-  it('renders the hero section', () => {
-    expect(() => render(<Home />)).not.toThrow();
-    expect(screen.getByText(/Finestar/i)).toBeInTheDocument();
+describe("Home Page", () => {
+  it("renders hero section", () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Home />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByText(/Shop Now/i)).toBeInTheDocument();
   });
 });

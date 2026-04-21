@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import Cart from "../Cart";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -98,15 +98,19 @@ describe("Cart Component", () => {
 
     render(<Cart />);
 
+    act(() => { 
     fireEvent.click(screen.getByText("Remove"));
+    });
 
     expect(screen.getByText("...")).toBeInTheDocument();
 
     resolve();
 
+  
     await waitFor(() => {
       expect(screen.queryByText("...")).not.toBeInTheDocument();
     });
+
   });
 
   it("navigates to checkout with correct state", async () => {
@@ -114,9 +118,13 @@ describe("Cart Component", () => {
 
     render(<Cart />);
 
+    act(() => {
     fireEvent.click(screen.getByText("Proceed to Checkout"));
+    });
 
-    jest.advanceTimersByTime(600);
+    await act(async () => {
+      jest.advanceTimersByTime(600);
+    });
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith("/checkout", {
@@ -133,9 +141,9 @@ describe("Cart Component", () => {
   it("disables checkout button while loading", () => {
     render(<Cart />);
 
-    const btn = screen.getByText("Proceed to Checkout");
-
-    fireEvent.click(btn);
+    act(() => {
+    fireEvent.click(screen.getByText("Proceed to Checkout"));
+    });
 
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
