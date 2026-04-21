@@ -14,9 +14,9 @@ const NavBar: React.FC = () => {
   const dispatch = useDispatch();
   const handleToggleTheme = () => dispatch(toggleTheme());
   const isSignedIn = false; // Replace with real auth logic
+  const cartCount = useSelector((state: RootState) => state.cart.items.reduce((sum, item) => sum + item.quantity, 0));
 
   const handleToggleMenu = () => setMenuOpen((open) => !open);
-
 
   return (
     <nav className="navbar">
@@ -24,8 +24,24 @@ const NavBar: React.FC = () => {
         <Link to="/" className="navbar-logo">Fine Cloth Store</Link>
       </div>
       <div className="navbar-right">
-        <Link to="/cart" className="navbar-cart" title="Cart">
+        <Link to="/cart" className="navbar-cart" title="Cart" style={{ position: 'relative' }}>
           <FaShoppingCart size={22} />
+          {cartCount > 0 && (
+            <span style={{
+              position: 'absolute',
+              top: -6,
+              right: -10,
+              background: '#e74c3c',
+              color: 'white',
+              borderRadius: '50%',
+              padding: '2px 7px',
+              fontSize: 12,
+              fontWeight: 700,
+              minWidth: 20,
+              textAlign: 'center',
+              zIndex: 2
+            }}>{cartCount}</span>
+          )}
         </Link>
         <Button className="navbar-hamburger" variant="outline" onClick={handleToggleMenu} aria-label="Menu">
           <FaBars size={22} />

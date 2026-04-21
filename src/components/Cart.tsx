@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../store';
+import type { RootState, AppDispatch } from '../store';
 import { saveCartThunk, clearCartThunk } from '../redux/slices/cartSlice';
 
 const Cart: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.cart.items);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleRemove = (productId: string, variant: import('../types').ProductVariant) => {
         const newCart = cartItems.filter(

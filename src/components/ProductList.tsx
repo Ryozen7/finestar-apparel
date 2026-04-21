@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import Input from './Input';
 import ProductItem from './ProductItem';
 import type { Product, ProductVariant } from '../types';
 import { useDispatch } from 'react-redux';
-import { saveCartThunk } from '../redux/slices/cartSlice';
+import type { AppDispatch } from '../store';
+import { saveCartThunk, fetchCartThunk } from '../redux/slices/cartSlice';
 import { useSelector } from 'react-redux';
 
 const ProductList: React.FC = () => {
@@ -13,7 +15,7 @@ const ProductList: React.FC = () => {
     const [sortBy, setSortBy] = useState<'name' | 'price' | 'category'>('name');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const cartItems = useSelector((state: any) => state.cart.items);
 
     useEffect(() => {
@@ -47,7 +49,7 @@ const ProductList: React.FC = () => {
         return <div>Error: {error}</div>;
     }
 
-    const onAddToCart = (product: Product, variant: ProductVariant) => {
+    const onAddToCart = async (product: Product, variant: ProductVariant) => {
         // Clone product and override price with variant price for cart
         const productWithVariantPrice = { ...product, price: variant.price };
         // Check if item exists
@@ -58,7 +60,8 @@ const ProductList: React.FC = () => {
         } else {
             newCart = [...cartItems, { productId: product.id, variant, quantity: 1, product: productWithVariantPrice }];
         }
-        dispatch(saveCartThunk(newCart));
+        await dispatch(saveCartThunk(newCart));
+        dispatch(fetchCartThunk());
     };
 
 
@@ -88,19 +91,19 @@ const ProductList: React.FC = () => {
     return (
         <div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-                <input
+                <Input
                     type="text"
                     placeholder="Search products..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    style={{ padding: 8, flex: 1 }}
+                    style={{ flex: 1 }}
                 />
-                <select value={sortBy} onChange={e => setSortBy(e.target.value as any)} style={{ padding: 8 }}>
+                <select value={sortBy} onChange={e => setSortBy(e.target.value as typeof sortBy)} style={{ padding: 8 }}>
                     <option value="name">Name</option>
                     <option value="price">Price</option>
                     <option value="category">Category</option>
                 </select>
-                <button onClick={() => setSortOrder(o => o === 'asc' ? 'desc' : 'asc')} style={{ padding: 8 }}>
+                <button onClick={() => setSortOrder((o: typeof sortOrder) => o === 'asc' ? 'desc' : 'asc')} style={{ padding: 8 }}>
                     {sortOrder === 'asc' ? '↑' : '↓'}
                 </button>
             </div>

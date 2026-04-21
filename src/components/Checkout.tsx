@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../store';
+import { clearCartThunk } from '../redux/slices/cartSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from './Button';
+import Input from './Input';
 import './Button.css';
 
 const Checkout: React.FC = () => {
@@ -10,13 +14,15 @@ const Checkout: React.FC = () => {
     const [promo, setPromo] = useState('');
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [timestamp, setTimestamp] = useState('');
+    const dispatch = useDispatch<AppDispatch>();
 
     const discount = promo.trim().toUpperCase() === 'SAVE10' ? 0.1 * subtotal : 0;
     const finalTotal = subtotal - discount;
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         setOrderPlaced(true);
         setTimestamp(new Date().toLocaleString());
+        await dispatch(clearCartThunk());
     };
 
     if (orderPlaced) {
@@ -34,7 +40,6 @@ const Checkout: React.FC = () => {
 
     return (
         <div className="checkout">
-            <h2>Checkout</h2>
             <div className="checkout-summary">
                 <h3>Order Summary</h3>
                 <ul>
@@ -45,13 +50,13 @@ const Checkout: React.FC = () => {
                     ))}
                 </ul>
                 <p>Subtotal: ${subtotal.toFixed(2)}</p>
-                <div style={{ margin: '12px 0' }}>
-                    <input
+                <div style={{ margin: '12px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Input
                         type="text"
                         placeholder="Promo code"
                         value={promo}
                         onChange={e => setPromo(e.target.value)}
-                        style={{ padding: 8, minWidth: 120, marginRight: 8 }}
+                        style={{ minWidth: 120 }}
                     />
                     <span style={{ color: discount > 0 ? 'green' : 'inherit' }}>
                         {discount > 0 ? 'Promo applied: SAVE10 (-10%)' : 'Enter SAVE10 for 10% off'}

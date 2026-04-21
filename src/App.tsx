@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from './store';
+import type { RootState, AppDispatch } from './store';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import CartPage from './pages/CartPage';
@@ -10,7 +10,7 @@ import { fetchCartThunk } from './redux/slices/cartSlice';
 
 const App: React.FC = () => {
   const darkMode = useSelector((state: RootState) => state.theme.darkMode);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
     document.body.className = darkMode ? 'dark-mode' : '';

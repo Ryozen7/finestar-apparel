@@ -2,7 +2,7 @@ import './styles/main.css';
 import App from './App';
 import store from './store';
 import { Provider } from 'react-redux';
-import { Server } from 'miragejs';
+import { Server, Response } from 'miragejs';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -11,6 +11,21 @@ import { createRoot } from 'react-dom/client'
 new Server({
   routes() {
     this.namespace = 'api';
+    // Load cart from localStorage or initialize
+    function loadCart() {
+      try {
+        const stored = localStorage.getItem('mirage_cart');
+        if (stored) return JSON.parse(stored);
+      } catch {}
+      return { id: '1', items: [] };
+    }
+    function saveCart(cart: { id: string; items: any[] }) {
+      try {
+        localStorage.setItem('mirage_cart', JSON.stringify(cart));
+      } catch {}
+    }
+    let cart = loadCart();
+
     this.get('/products', () => [
       {
         id: '1',
@@ -47,6 +62,30 @@ new Server({
         image: '',
       }
     ]);
+
+    // GET /api/cart
+    this.get('/cart', () => {
+      cart = loadCart();
+      return cart;
+    });
+
+    // POST /api/cart (replace items)
+    this.post('/cart', (schema, request) => {
+      const attrs = JSON.parse(request.requestBody);
+      if (!Array.isArray(attrs.items)) {
+        return new Response(400, {}, { error: 'Items must be an array' });
+      }
+      cart = { ...cart, items: attrs.items };
+      saveCart(cart);
+      return cart;
+    });
+
+    // POST /api/cart/clear
+    this.post('/cart/clear', () => {
+      cart = { ...cart, items: [] };
+      saveCart(cart);
+      return cart;
+    });
   },
 });
 
