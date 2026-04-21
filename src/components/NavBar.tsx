@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaUserCircle, FaBars, FaSun, FaMoon } from 'react-icons/fa';
 import './NavBar.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 import { toggleTheme } from '../redux/slices/themeSlice';
 import Button from './Button';
 import './Button.css';

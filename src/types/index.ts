@@ -18,20 +18,6 @@ export interface CartItem {
     quantity: number;
     product: Product;
 }
-export interface Product {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    imageUrl: string;
-    category: string;
-}
-
-export interface CartItem {
-    product: Product;
-    quantity: number;
-}
-
 export interface CheckoutDetails {
     items: CartItem[];
     totalAmount: number;

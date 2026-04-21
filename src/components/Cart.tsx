@@ -1,10 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
+import type { RootState } from '../store';
 import { removeFromCart, updateQuantity } from '../redux/slices/cartSlice';
 import CartItem from './CartItem';
-import Button from './Button';
-import './Button.css';
 
 const Cart: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.cart.items);

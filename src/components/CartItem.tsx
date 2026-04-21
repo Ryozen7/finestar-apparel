@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import './Button.css';
-import { CartItem as CartItemType } from '../types';
+import type { CartItem as CartItemType } from '../types';
 
 interface CartItemProps {
   item: CartItemType;
