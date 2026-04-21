@@ -34,13 +34,16 @@ h3 {
 }
 
 .container {
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   overflow: hidden;
   padding: 0 0 2rem 0;
 }
 
+.mt-10 {
+    margin-top: 100px;
+}
 .hero {
   background: linear-gradient(90deg, var(--primary) 60%, var(--tertiary) 100%);
   color: #fff;
@@ -124,4 +127,23 @@ h3 {
 
 .button:hover {
   background: #2c3e50;
+}
+
+.cart-page-container {
+  max-width: 900px;
+  width: 100vw;
+  margin: 10rem auto 0 auto;
+  padding: 0 2rem 3rem 2rem;
+}
+
+.navbar-logo-btn,
+.navbar-logo-btn:hover,
+.navbar-cart-btn:hover,
+.navbar-cart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  align-items: center;
 }

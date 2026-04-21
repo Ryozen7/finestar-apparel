@@ -143,4 +143,24 @@ npm test:coverage
 - No real payments
 - Limited product dataset
 - PDF generation is client-side only
+
+---
+
+## Ionic Framework Integration
+
+### Setup
+
+The project uses the [Ionic Framework](https://ionicframework.com/docs/react) for modern, mobile-friendly UI components and navigation. Ionic was added with:
+
+```sh
+npm install @ionic/react @ionic/react-router ionicons
 ```
+
+### Integration Details
+- The app is wrapped with `<IonApp>` and `<IonReactRouter>` in `src/index.tsx` to provide Ionic context and routing.
+- Routing uses `<IonRouterOutlet>` and Ionic's `<IonPage>`, `<IonContent>` for each page.
+- Navigation links use `<IonLink>` or `<IonRouterLink>` for SPA navigation.
+- UI elements such as lists, buttons, cards, and inputs are built with Ionic components (`IonList`, `IonItem`, `IonButton`, `IonInput`, `IonCard`, etc.) for a consistent look and feel.
+- Standard HTML elements in pages/components were replaced with their Ionic equivalents for better mobile and desktop UX.
+
+See the code in `src/index.tsx`, `src/App.tsx`, and the main pages/components for examples of Ionic usage.

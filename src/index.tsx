@@ -6,6 +6,10 @@ import { Server, Response } from "miragejs";
 import { mockProducts } from "./constants/mock-products";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { IonApp } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+
+import "@ionic/react/css/core.css";
 
 new Server({
   routes() {
@@ -55,8 +59,12 @@ new Server({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+   <IonApp>
     <Provider store={store}>
-      <App />
+      <IonReactRouter>
+        <App />
+      </IonReactRouter>
     </Provider>
+  </IonApp>
   </StrictMode>,
 );

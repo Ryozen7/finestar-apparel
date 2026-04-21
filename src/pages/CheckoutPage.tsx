@@ -1,13 +1,16 @@
 import React from "react";
+import { IonContent, IonPage } from '@ionic/react';
 import Checkout from "../components/Checkout";
 import "../styles/Cart.css";
 
 const CheckoutPage: React.FC = () => {
   return (
-    <div className="cart-page-container">
-      <h1>Checkout</h1>
-      <Checkout />
-    </div>
+    <IonPage className="container">
+      <IonContent className="cart-page-container">
+        <h1>Checkout</h1>
+        <Checkout />
+      </IonContent>
+    </IonPage>  
   );
 };
 

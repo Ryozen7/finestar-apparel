@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import Cart from "../Cart";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { saveCartThunk } from "../../redux/slices/cartSlice";
 
 // mocks
@@ -11,7 +11,7 @@ jest.mock("react-redux", () => ({
 }));
 
 jest.mock("react-router-dom", () => ({
-  useNavigate: jest.fn(),
+  useHistory: jest.fn(),
 }));
 
 jest.mock("../../redux/slices/cartSlice", () => ({
@@ -33,7 +33,7 @@ describe("Cart Component", () => {
 
   beforeEach(() => {
     (useDispatch as unknown as jest.Mock).mockReturnValue(mockDispatch);
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+    (useHistory as jest.Mock).mockReturnValue(mockNavigate);
 
     (useSelector as unknown as jest.Mock).mockImplementation((cb) =>
       cb({ cart: { items: mockCartItems } })

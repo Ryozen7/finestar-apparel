@@ -1,7 +1,8 @@
 import { type FC, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { IonRouterOutlet } from '@ionic/react';
+import { Route } from 'react-router-dom';
 import Home from "./pages/Home";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -22,19 +23,15 @@ const App: FC = () => {
   }, [dispatch]);
 
   return (
-    <Router>
-      <div className="app">
+    <main className={`container ${darkMode ? "dark-mode" : ""}`}>
         <Toaster position="top-center" richColors />
         <NavBar />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+        <IonRouterOutlet id="main"  className="main-content">
+            <Route path="/" component={Home} />
+            <Route path="/cart" component={CartPage} />
+            <Route path="/checkout" component={CheckoutPage} />
+        </IonRouterOutlet>
+     </main>
   );
 };
 

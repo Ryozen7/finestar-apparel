@@ -1,13 +1,20 @@
 import React from "react";
-import Cart from "../components/Cart";
+import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
+import  Cart  from "../components/Cart";
 import "../styles/Cart.css";
 
 const CartPage: React.FC = () => {
   return (
-    <div className="cart-page-container">
-      <h1>Your Shopping Cart</h1>
-      <Cart />
-    </div>
+    <IonPage className="container">
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Your Cart</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="cart-page-container">
+        <Cart />
+      </IonContent>
+    </IonPage>
   );
 };
 

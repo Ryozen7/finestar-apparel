@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { IonModal, IonContent, IonHeader, IonToolbar, IonTitle, IonButton, IonSelect, IonSelectOption, IonImg, IonLabel, IonText } from '@ionic/react';
 import "../styles/ProductModal.css";
-import Button from "./Button";
 import { toast } from "sonner";
 import type { ProductVariant, ProductModalProps } from "../types";
 
@@ -30,8 +30,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
   );
 
   const handleVariantChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const [size, color] = e.target.value.split("|");
+    (value: string) => {
+      const [size, color] = value.split("|");
       setSelectedVariant(
         product.variants.find((v) => v.size === size && v.color === color) || null,
       );
@@ -39,7 +39,7 @@ const ProductModal: React.FC<ProductModalProps> = ({
     [product.variants],
   );
 
-  if (!open) return null;
+
 
   const handleAddToCart = useCallback(() => {
     if (selectedVariant) {
@@ -50,57 +50,57 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
   const fallbackImg = "/no-image.png";
   return (
-    <div className="modal-backdrop">
-      <div className="modal-content">
-        <img
+    <IonModal isOpen={open} onDidDismiss={onClose} backdropDismiss={true} className="modal-content">
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle className="title">{product.name}</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <div className="modal-inner">
+        <IonImg
           src={product.image || fallbackImg}
           alt={product.name}
           className="modal-product-img"
-          onError={e => {
-            const target = e.target as HTMLImageElement;
+          onIonError={e => {
+            const target = e.target as unknown as HTMLImageElement;
             if (target.src !== window.location.origin + fallbackImg) {
               target.src = fallbackImg;
             }
           }}
         />
-        <h2>{product.name}</h2>
-        <p>Category: {product.category}</p>
-        <p>
-          Price: $
-          {selectedVariant
-            ? selectedVariant.price.toFixed(2)
-            : product.variants[0]?.price.toFixed(2)}
-        </p>
+        <IonText><p>Category: {product.category}</p></IonText>
+
+          <p>
+            Price: $
+            {selectedVariant
+              ? selectedVariant.price.toFixed(2)
+              : product.variants[0]?.price.toFixed(2)}
+          </p>
         <div className="variant-select-wrapper">
-          <label htmlFor="variant-select">Choose variant:</label>
+          <IonLabel>Choose variant:</IonLabel>
           <select
-            id="variant-select"
-            className="variant-select"
-            value={
-              selectedVariant
-                ? `${selectedVariant.size}|${selectedVariant.color}`
-                : ""
-            }
-            onChange={handleVariantChange}
+            value={selectedVariant ? `${selectedVariant.size}|${selectedVariant.color}` : ""}
+            onChange={e => handleVariantChange(e.target.value)}
           >
             {variantOptions}
           </select>
         </div>
         <div className="modal-actions">
-          <Button
-            variant="primary"
+          <IonButton
+            color="ghost"
             onClick={handleAddToCart}
-            disabled={!selectedVariant}
-            loading={loading}
+            disabled={!selectedVariant || loading}
+            expand="block"
+            className="btn-add-to-cart"
           >
-            Add to Cart
-          </Button>
-          <Button variant="outline" onClick={onClose}>
+            {loading ? "Adding..." : "Add to Cart"}
+          </IonButton>
+          <IonButton color="medium" fill="outline" className="btn-cancel" onClick={onClose} expand="block">
             Cancel
-          </Button>
+          </IonButton>
         </div>
       </div>
-    </div>
+    </IonModal>
   );
 };
 

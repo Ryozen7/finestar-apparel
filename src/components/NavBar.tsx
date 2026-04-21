@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { FaShoppingCart, FaBars, FaSun, FaMoon } from "react-icons/fa";
 import "../styles/NavBar.css";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store";
 import { toggleTheme } from "../redux/slices/themeSlice";
 import Button from "./Button";
+import { IonButton } from "@ionic/react";
 
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,19 +21,19 @@ const NavBar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="navbar-logo" aria-label="Home">
+          <IonButton onClick={() =>  window.location.href = "/"} fill="clear" className="navbar-logo-btn">
           <img
             src="/logo.png"
             alt="FineStar Apparel Logo"
             className="navbar-logo-img"
           />
-        </Link>
+          </IonButton>
       </div>
       <div className="navbar-right">
-        <Link to="/cart" className="navbar-cart" title="Cart">
-          <FaShoppingCart size={22} />
-          {cartCount > 0 && <span>{cartCount}</span>}
-        </Link>
+          <IonButton onClick={() =>  window.location.href = "/cart"} fill="clear" className="navbar-cart-btn">
+            <FaShoppingCart size={22} />
+            {cartCount > 0 && <span>{cartCount}</span>}
+          </IonButton>
         <Button
           className="navbar-hamburger"
           variant="outline"

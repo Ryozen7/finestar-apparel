@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store";
 import { clearCartThunk } from "../redux/slices/cartSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import "../styles/Checkout.css";
@@ -11,9 +11,9 @@ import { toast } from "sonner";
 import type { CartItem } from "../types";
 
 const Checkout: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { cartItems = [], subtotal = 0 } = location.state || {};
+  const location : { state: { cartItems: CartItem[]; subtotal: number } }    = useLocation();
+  const history = useHistory();
+  const { cartItems = [], subtotal = 0 } = location.state || { cartItems: [], subtotal: 0 };
   const [promo, setPromo] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [timestamp, setTimestamp] = useState("");
@@ -79,7 +79,7 @@ const Checkout: React.FC = () => {
         >
           Download PDF
         </Button>
-        <Button variant="primary" onClick={() => navigate("/")}>
+        <Button variant="primary" onClick={() => history.push("/")}>
           Back to Store
         </Button>
       </div>

@@ -17,7 +17,7 @@
 /* Cart Page & Product Card Styles */
 
 .cart-page-container {
-  max-width: 900px;
+  max-width: 100%;
   margin: 2.5rem auto 0 auto;
   padding: 0 2rem 3rem 2rem;
 }
@@ -33,6 +33,13 @@
     box-shadow 0.18s,
     border 0.18s;
 }
+
+
+.cart-empty-card {
+  margin: 5rem 0;
+  padding: 2rem 2rem 1.5rem 2rem;
+}
+
 .cart-product-card:hover {
   box-shadow: 0 4px 32px rgba(0, 0, 0, 0.12);
   border-color: var(--primary);
@@ -123,4 +130,15 @@
   display: flex;
   justify-content: center;
   z-index: 100;
+}
+
+.btn-add-to-cart {
+  font-size: 1.1rem;
+  padding: 0.75rem 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+
 }

@@ -1,5 +1,5 @@
 import { type FC, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { saveCartThunk } from "../redux/slices/cartSlice";
@@ -46,7 +46,7 @@ const Cart: FC = () => {
     setLoadingItem(null);
   }, [cartItems, dispatch]);
 
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const calculateSubtotal = useCallback(() => {
     return cartItems.reduce(
@@ -59,7 +59,7 @@ const Cart: FC = () => {
     setLoadingCheckout(true);
     setTimeout(() => {
       setLoadingCheckout(false);
-      navigate("/checkout", {
+      history.push("/checkout", {
         state: {
           cartItems,
           subtotal: calculateSubtotal(),
@@ -79,9 +79,11 @@ const Cart: FC = () => {
   );
 
   return (
-    <div className="cart">
+    <div className="cart fullscreen">
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+         <div className="cart-empty-card">
+            <p>Your cart is empty.</p>
+        </div>
       ) : (
         <div>
           {Object.entries(grouped).map(([productId, items]) => (
