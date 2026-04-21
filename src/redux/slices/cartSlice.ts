@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { CartItem, ProductVariant } from "../../types";
+import type { CartItem } from "../../types";
 import { fetchCart, saveCart, clearCartApi } from "../api/cartApi";
 
 import type { CartState } from "../../types";
@@ -26,19 +26,6 @@ export const clearCartThunk = createAsyncThunk("cart/clearCart", async () => {
   await clearCartApi();
   return [];
 });
-
-function findCartItemIndex(
-  items: CartItem[],
-  productId: string,
-  variant: ProductVariant,
-) {
-  return items.findIndex(
-    (item) =>
-      item.productId === productId &&
-      item.variant.size === variant.size &&
-      item.variant.color === variant.color,
-  );
-}
 
 const cartSlice = createSlice({
   name: "cart",

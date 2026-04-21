@@ -24,4 +24,13 @@
 }
 .product-list-item {
   padding: 8px;
+  width: 100%;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: start;
+  width: 100%;
 }

@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 import type { Product, ProductsState } from "../../types";
+import { removeProductDuplicates } from "../../utils/removeProductDuplicates";
 
 const initialState: ProductsState = {
   items: [],
@@ -34,16 +35,7 @@ const productsSlice = createSlice({
         fetchProducts.fulfilled,
         (state, action: PayloadAction<Product[]>) => {
           // Remove duplicates by name, price, category
-          const unique = action.payload.filter(
-            (item, idx, arr) =>
-              arr.findIndex(
-                (p) =>
-                  p.name === item.name &&
-                  p.price === item.price &&
-                  p.category === item.category,
-              ) === idx,
-          );
-          state.items = unique;
+          state.items = removeProductDuplicates(action.payload);
           state.status = "succeeded";
         },
       )
