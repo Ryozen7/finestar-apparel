@@ -7,6 +7,8 @@ const ProductList: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [search, setSearch] = useState('');
+    const [sortBy, setSortBy] = useState<'name' | 'price' | 'category'>('name');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -44,6 +46,7 @@ const ProductList: React.FC = () => {
         console.log('Add to cart:', product);
     };
 
+
     // Fuzzy search filter
     const filteredProducts = products.filter((product) => {
         const q = search.toLowerCase();
@@ -54,17 +57,40 @@ const ProductList: React.FC = () => {
         );
     });
 
+    // Sorting
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+        let cmp = 0;
+        if (sortBy === 'name') {
+            cmp = a.name.localeCompare(b.name);
+        } else if (sortBy === 'category') {
+            cmp = a.category.localeCompare(b.category);
+        } else if (sortBy === 'price') {
+            cmp = a.price - b.price;
+        }
+        return sortOrder === 'asc' ? cmp : -cmp;
+    });
+
     return (
         <div>
-            <input
-                type="text"
-                placeholder="Search products..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                style={{ marginBottom: 16, padding: 8, width: '100%' }}
-            />
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+                <input
+                    type="text"
+                    placeholder="Search products..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    style={{ padding: 8, flex: 1 }}
+                />
+                <select value={sortBy} onChange={e => setSortBy(e.target.value as any)} style={{ padding: 8 }}>
+                    <option value="name">Name</option>
+                    <option value="price">Price</option>
+                    <option value="category">Category</option>
+                </select>
+                <button onClick={() => setSortOrder(o => o === 'asc' ? 'desc' : 'asc')} style={{ padding: 8 }}>
+                    {sortOrder === 'asc' ? '↑' : '↓'}
+                </button>
+            </div>
             <div className="product-list">
-                {filteredProducts.map(product => (
+                {sortedProducts.map(product => (
                     <ProductItem key={product.id} product={product} onAddToCart={onAddToCart} />
                 ))}
             </div>
