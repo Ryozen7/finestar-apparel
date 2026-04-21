@@ -1,4 +1,4 @@
-import React from "react";
+import { type FC, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -7,22 +7,24 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import NavBar from "./components/NavBar";
 import { fetchCartThunk } from "./redux/slices/cartSlice";
+import { Toaster } from "sonner";
 
-const App: React.FC = () => {
+const App: FC = () => {
   const darkMode = useSelector((state: RootState) => state.theme.darkMode);
   const dispatch = useDispatch<AppDispatch>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.className = darkMode ? "dark-mode" : "";
   }, [darkMode]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchCartThunk());
   }, [dispatch]);
 
   return (
     <Router>
       <div className="app">
+        <Toaster position="top-center" richColors />
         <NavBar />
         <main>
           <Routes>

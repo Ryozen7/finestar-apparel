@@ -3,15 +3,17 @@ import type { Product } from "../types";
 export const mockProducts: Product[] = [
   {
     id: "1",
-    name: "Classic White T-Shirt",
+    name: "Classic T-Shirt",
     price: 19.99,
     category: "Tops",
     variants: [
       { size: "S", color: "White", price: 19.99 },
       { size: "M", color: "White", price: 29.99 },
-      { size: "L", color: "White", price: 39.99 }
+      { size: "M", color: "Blue", price: 29.99 },
+      { size: "L", color: "White", price: 39.99 },
+      { size: "L", color: "Blue", price: 39.99 },
     ],
-    image: ""
+    image: "/t-shirt.webp"
   },
   {
     id: "2",
@@ -23,7 +25,7 @@ export const mockProducts: Product[] = [
       { size: "32", color: "Blue", price: 35.99 },
       { size: "34", color: "Blue", price: 38.99 }
     ],
-    image: ""
+    image: "/jeans.webp"
   },
   {
     id: "3",
@@ -34,19 +36,19 @@ export const mockProducts: Product[] = [
       { size: "M", color: "Red", price: 29.99 },
       { size: "L", color: "Red", price: 39.99 }
     ],
-    image: ""
+    image: "/hoodie.webp"
   },
   {
     id: "4",
-    name: "Black Sneakers",
+    name: "Sneakers",
     price: 49.99,
     category: "Footwear",
     variants: [
       { size: "8", color: "Black", price: 42.99 },
-      { size: "9", color: "Black", price: 45.99 },
-      { size: "10", color: "Black", price: 49.99 }
+      { size: "9", color: "Red", price: 45.99 },
+      { size: "10", color: "White", price: 49.99 }
     ],
-    image: ""
+    image: "/sneakers.webp"
   },
   {
     id: "5",
@@ -57,7 +59,7 @@ export const mockProducts: Product[] = [
       { size: "S", color: "Green", price: 20.99 },
       { size: "M", color: "Green", price: 24.99 }
     ],
-    image: ""
+    image: "/polo.jpeg"
   },
   {
     id: "6",
@@ -68,18 +70,18 @@ export const mockProducts: Product[] = [
       { size: "M", color: "Grey", price: 31.99 },
       { size: "L", color: "Grey", price: 34.99 }
     ],
-    image: ""
+    image: "/joggers.jpeg"
   },
   {
     id: "7",
-    name: "Yellow Summer Dress",
+    name: "Summer Dress",
     price: 44.99,
     category: "Dresses",
     variants: [
       { size: "S", color: "Yellow", price: 42.99 },
-      { size: "M", color: "Yellow", price: 44.99 }
+      { size: "M", color: "White", price: 44.99 }
     ],
-    image: ""
+    image: "/summer-dress.webp"
   },
   {
     id: "8",
@@ -90,6 +92,6 @@ export const mockProducts: Product[] = [
       { size: "M", color: "Navy", price: 59.99 },
       { size: "L", color: "Navy", price: 69.99 }
     ],
-    image: ""
+    image: "/blazer.webp"
   }
 ];

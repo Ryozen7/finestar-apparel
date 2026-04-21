@@ -12,7 +12,7 @@ export function removeProductDuplicates(products: Product[]): Product[] {
         (p) =>
           p.name === item.name &&
           p.price === item.price &&
-          p.category === item.category
-      ) === idx
+          p.category === item.category,
+      ) === idx,
   );
 }

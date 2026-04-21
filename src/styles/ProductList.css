@@ -12,11 +12,11 @@
 }
 
 .product-list-toolbar input {
-    flex: 1;
-    max-width: 500px;
+  flex: 1;
+  max-width: 500px;
 }
 .product-list-toolbar select {
-    width: 150px;
+  width: 150px;
 }
 
 .product-list-toolbar button {

@@ -14,8 +14,15 @@ export interface ProductItemProps {
 
 export interface CartItemProps {
   item: CartItem;
-  onRemove: (productId: string, variant: { size: string; color: string }) => void;
-  onQuantityChange: (productId: string, variant: { size: string; color: string }, quantity: number) => void;
+  onRemove: (
+    productId: string,
+    variant: { size: string; color: string },
+  ) => void;
+  onQuantityChange: (
+    productId: string,
+    variant: { size: string; color: string },
+    quantity: number,
+  ) => void;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store";
 import { clearCartThunk } from "../redux/slices/cartSlice";
@@ -7,6 +7,7 @@ import Button from "./Button";
 import Input from "./Input";
 import "../styles/Checkout.css";
 import { downloadReceiptPDF } from "../utils/downloadReceiptPDF";
+import { toast } from "sonner";
 
 const Checkout: React.FC = () => {
   const location = useLocation();
@@ -15,13 +16,27 @@ const Checkout: React.FC = () => {
   const [promo, setPromo] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [timestamp, setTimestamp] = useState("");
+
+  // Format date as 'Month Day, Year Time AM/PM'
+  const formattedDate = useMemo(() => {
+    if (!timestamp) return "";
+    const date = new Date(timestamp);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }, [timestamp]);
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
 
-  const discount = promo.trim().toUpperCase() === "SAVE10" ? 0.1 * subtotal : 0;
-  const finalTotal = subtotal - discount;
+  const discount = useMemo(() => (promo.trim().toUpperCase() === "SAVE10" ? 0.1 * subtotal : 0), [promo, subtotal]);
+  const finalTotal = useMemo(() => subtotal - discount, [subtotal, discount]);
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = useCallback(async () => {
     setLoading(true);
     // Simulate order processing delay
     setTimeout(async () => {
@@ -29,14 +44,15 @@ const Checkout: React.FC = () => {
       setTimestamp(new Date().toLocaleString());
       await dispatch(clearCartThunk());
       setLoading(false);
+      toast.success("Order placed successfully!");
     }, 1000);
-  };
+  }, [dispatch]);
 
   if (orderPlaced) {
     return (
       <div className="checkout-receipt">
         <h2>Order Receipt</h2>
-        <div>Date: {timestamp}</div>
+        <div>Date: {formattedDate}</div>
         <div>Total: ${subtotal.toFixed(2)}</div>
         <div>Discount: -${discount.toFixed(2)}</div>
         <div>
@@ -46,7 +62,7 @@ const Checkout: React.FC = () => {
           variant="secondary"
           onClick={() =>
             downloadReceiptPDF({
-              date: timestamp,
+              date: formattedDate,
               subtotal,
               discount,
               finalTotal,
@@ -62,10 +78,7 @@ const Checkout: React.FC = () => {
         >
           Download PDF
         </Button>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/")}
-        >
+        <Button variant="primary" onClick={() => navigate("/")}>
           Back to Store
         </Button>
       </div>

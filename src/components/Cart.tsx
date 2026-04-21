@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import { type FC, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { saveCartThunk } from "../redux/slices/cartSlice";
 import "../styles/Cart.css";
 
-const Cart: React.FC = () => {
+const Cart: FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch<AppDispatch>();
 
   const [loadingItem, setLoadingItem] = useState<string | null>(null);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
-  const handleRemove = async (
+  const handleRemove = useCallback(async (
     productId: string,
     variant: import("../types").ProductVariant,
   ) => {
@@ -27,9 +27,9 @@ const Cart: React.FC = () => {
     );
     await dispatch(saveCartThunk(newCart));
     setLoadingItem(null);
-  };
+  }, [cartItems, dispatch]);
 
-  const handleQuantityChange = async (
+  const handleQuantityChange = useCallback(async (
     productId: string,
     variant: import("../types").ProductVariant,
     quantity: number,
@@ -44,10 +44,10 @@ const Cart: React.FC = () => {
     );
     await dispatch(saveCartThunk(newCart));
     setLoadingItem(null);
-  };
+  }, [cartItems, dispatch]);
 
-  const [showReceipt, setShowReceipt] = React.useState(false);
-  const [receipt, setReceipt] = React.useState<{
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [receipt, setReceipt] = useState<{
     total: number;
     discount: number;
     final: number;
@@ -55,12 +55,12 @@ const Cart: React.FC = () => {
   } | null>(null);
   const navigate = useNavigate();
 
-  const calculateSubtotal = () => {
+  const calculateSubtotal = useCallback(() => {
     return cartItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0,
     );
-  };
+  }, [cartItems]);
 
   const handleCheckout = async () => {
     setLoadingCheckout(true);

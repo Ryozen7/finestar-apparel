@@ -1,12 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import {
-  FaShoppingCart,
-  FaUserCircle,
-  FaBars,
-  FaSun,
-  FaMoon,
-} from "react-icons/fa";
+import { FaShoppingCart, FaBars, FaSun, FaMoon } from "react-icons/fa";
 import "../styles/NavBar.css";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store";
@@ -17,19 +11,22 @@ const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const darkMode = useSelector((state: RootState) => state.theme.darkMode);
   const dispatch = useDispatch();
-  const handleToggleTheme = () => dispatch(toggleTheme());
-  const isSignedIn = false; // Replace with real auth logic
+  const handleToggleTheme = useCallback(() => dispatch(toggleTheme()), [dispatch]);
   const cartCount = useSelector((state: RootState) =>
     state.cart.items.reduce((sum, item) => sum + item.quantity, 0),
   );
 
-  const handleToggleMenu = () => setMenuOpen((open) => !open);
+  const handleToggleMenu = useCallback(() => setMenuOpen((open) => !open), []);
 
   return (
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/" className="navbar-logo" aria-label="Home">
-            <img src="/logo.png" alt="FineStar Apparel Logo" className="navbar-logo-img" />
+          <img
+            src="/logo.png"
+            alt="FineStar Apparel Logo"
+            className="navbar-logo-img"
+          />
         </Link>
       </div>
       <div className="navbar-right">
@@ -56,18 +53,6 @@ const NavBar: React.FC = () => {
               {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
               {darkMode ? " Light Mode" : " Dark Mode"}
             </Button>
-            <Link to="/profile" className="navbar-menu-item">
-              <FaUserCircle size={18} /> Profile
-            </Link>
-            {isSignedIn ? (
-              <Button className="navbar-menu-item" variant="secondary">
-                Sign Out
-              </Button>
-            ) : (
-              <Button className="navbar-menu-item" variant="primary">
-                Sign In
-              </Button>
-            )}
           </div>
         )}
       </div>

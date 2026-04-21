@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Input from "./Input";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import ProductSearch from "./ProductSearch";
 import ProductItem from "./ProductItem";
 import type { Product, ProductVariant } from "../types";
 import "../styles/ProductList.css";
@@ -13,11 +13,13 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
   const [sortBy, setSortBy] = useState<"name" | "price" | "category">("name");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const dispatch = useDispatch<AppDispatch>();
   const cartItems = useSelector((state: any) => state.cart.items);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -42,15 +44,7 @@ const ProductList: React.FC = () => {
     fetchProducts();
   }, []);
 
-  if (loading) {
-    return <div>Loading products...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  const onAddToCart = async (product: Product, variant: ProductVariant) => {
+  const onAddToCart = useCallback(async (product: Product, variant: ProductVariant) => {
     // Clone product and override price with variant price for cart
     const productWithVariantPrice = { ...product, price: variant.price };
     // Check if item exists
@@ -78,41 +72,53 @@ const ProductList: React.FC = () => {
     }
     await dispatch(saveCartThunk(newCart));
     dispatch(fetchCartThunk());
-  };
+  }, [cartItems, dispatch]);
+
 
   // Fuzzy search filter
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = useMemo(() => {
     const q = search.toLowerCase();
-    return (
+    return products.filter((product) =>
       product.name.toLowerCase().includes(q) ||
       product.category.toLowerCase().includes(q) ||
       product.price.toString().toLowerCase().includes(q)
     );
-  });
+  }, [products, search]);
 
   // Sorting
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    let cmp = 0;
-    if (sortBy === "name") {
-      cmp = a.name.localeCompare(b.name);
-    } else if (sortBy === "category") {
-      cmp = a.category.localeCompare(b.category);
-    } else if (sortBy === "price") {
-      cmp = a.price - b.price;
-    }
-    return sortOrder === "asc" ? cmp : -cmp;
-  });
+  const sortedProducts = useMemo(() => {
+    return [...filteredProducts].sort((a, b) => {
+      let cmp = 0;
+      if (sortBy === "name") {
+        cmp = a.name.localeCompare(b.name);
+      } else if (sortBy === "category") {
+        cmp = a.category.localeCompare(b.category);
+      } else if (sortBy === "price") {
+        cmp = a.price - b.price;
+      }
+      return sortOrder === "asc" ? cmp : -cmp;
+    });
+  }, [filteredProducts, sortBy, sortOrder]);
+
+  // Debounced search handler for ProductSearch
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchLoading(true);
+    setSearch(value);
+    setTimeout(() => setSearchLoading(false), 400);
+  }, []);
+
+  if (loading) {
+    return <div>Loading products...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
       <div className="product-list-toolbar">
-        <Input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="product-list-toolbar-input"
-        />
+        <ProductSearch value={search} onChange={handleSearchChange} loading={searchLoading} />
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
