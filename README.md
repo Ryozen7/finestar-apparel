@@ -143,4 +143,37 @@ npm test:coverage
 - No real payments
 - Limited product dataset
 - PDF generation is client-side only
+- The Ionic UI implementation is basic and may not fully leverage advanced Ionic theming, transitions, or mobile best practices due to limited experience with the framework.
+
+---
+
+## Ionic Framework (feat-ionic-extension branch)
+
+### Try the Ionic UI Version
+
+To use the Ionic Framework integration, checkout the dedicated branch:
+
+```sh
+# Make sure you have cloned the repo
+git checkout feat-ionic-extension
+npm install
+npm run dev
 ```
+
+#### Installation
+To add Ionic Framework to this project, the following packages were installed:
+
+```sh
+npm install @ionic/react @ionic/react-router ionicons
+```
+
+This brings in the core Ionic React components, router integration, and icon set.
+
+### How Ionic is Integrated
+- The app is wrapped with `<IonApp>` and `<IonReactRouter>` in `src/index.tsx` for Ionic context and routing.
+- Routing uses `<IonRouterOutlet>`, `<IonPage>`, `<IonContent>`, and `<IonHeader>` for each page.
+- Navigation links use `<IonLink>` or `<IonRouterLink>` for SPA navigation.
+- UI elements such as lists, buttons, cards, and inputs are not fully integrated with Ionic components (`IonList`, `IonItem`, `IonButton`, `IonInput`, `IonCard`, etc.) due to knowledge limitations.
+- Product modals and dialogs use `<IonModal>` for native mobile-style overlays.
+
+See the code in `src/index.tsx`, `src/App.tsx`, and the main pages/components for examples of Ionic usage.
