@@ -1,16 +1,17 @@
 import React from 'react';
+import '../styles/ProductModal.css';
 import Button from './Button';
 import type { Product, ProductVariant } from '../types';
-import './Button.css';
 
 interface ProductModalProps {
   product: Product;
   open: boolean;
   onClose: () => void;
   onAdd: (variant: ProductVariant) => void;
+  loading: boolean;
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onAdd }) => {
+const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onAdd, loading }) => {
   const [selectedVariant, setSelectedVariant] = React.useState<ProductVariant | null>(null);
 
   React.useEffect(() => {
@@ -20,8 +21,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onA
   if (!open) return null;
 
   return (
-    <div className="modal-backdrop" style={{ position: 'fixed', top:0, left:0, right:0, bottom:0, background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="modal-content" style={{ background: '#fff', borderRadius: 8, padding: 24, minWidth: 320, maxWidth: 400, boxShadow: '0 4px 24px rgba(0,0,0,0.15)' }}>
+    <div className="modal-backdrop">
+      <div className="modal-content">
         <h2>{product.name}</h2>
         <p>Category: {product.category}</p>
         <p>
@@ -30,16 +31,16 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onA
             ? selectedVariant.price.toFixed(2)
             : product.variants[0]?.price.toFixed(2)}
         </p>
-        <div style={{ margin: '1rem 0' }}>
+        <div className="variant-select-wrapper">
           <label htmlFor="variant-select">Choose variant:</label>
           <select
             id="variant-select"
+            className="variant-select"
             value={selectedVariant ? `${selectedVariant.size}|${selectedVariant.color}` : ''}
             onChange={e => {
               const [size, color] = e.target.value.split('|');
               setSelectedVariant(product.variants.find(v => v.size === size && v.color === color) || null);
             }}
-            style={{ marginLeft: 8, padding: 6 }}
           >
             {product.variants.map((variant, idx) => (
               <option key={idx} value={`${variant.size}|${variant.color}`}>
@@ -48,8 +49,8 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, open, onClose, onA
             ))}
           </select>
         </div>
-        <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-          <Button variant="primary" onClick={() => selectedVariant && onAdd(selectedVariant)} disabled={!selectedVariant}>Add to Cart</Button>
+        <div className="modal-actions">
+          <Button variant="primary" onClick={() => selectedVariant && onAdd(selectedVariant)} disabled={!selectedVariant} loading={loading}>Add to Cart</Button>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
         </div>
       </div>

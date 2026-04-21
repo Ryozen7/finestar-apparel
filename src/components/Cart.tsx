@@ -1,27 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState, AppDispatch } from '../store';
-import { saveCartThunk, clearCartThunk } from '../redux/slices/cartSlice';
+import { saveCartThunk } from '../redux/slices/cartSlice';
 
 const Cart: React.FC = () => {
     const cartItems = useSelector((state: RootState) => state.cart.items);
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleRemove = (productId: string, variant: import('../types').ProductVariant) => {
+    const [loadingItem, setLoadingItem] = useState<string | null>(null);
+    const [loadingCheckout, setLoadingCheckout] = useState(false);
+
+    const handleRemove = async (productId: string, variant: import('../types').ProductVariant) => {
+        setLoadingItem(productId + '-' + variant.size + '-' + variant.color);
         const newCart = cartItems.filter(
             (item) => !(item.productId === productId && item.variant.size === variant.size && item.variant.color === variant.color)
         );
-        dispatch(saveCartThunk(newCart));
+        await dispatch(saveCartThunk(newCart));
+        setLoadingItem(null);
     };
 
-    const handleQuantityChange = (productId: string, variant: import('../types').ProductVariant, quantity: number) => {
+    const handleQuantityChange = async (productId: string, variant: import('../types').ProductVariant, quantity: number) => {
+        setLoadingItem(productId + '-' + variant.size + '-' + variant.color);
         const newCart = cartItems.map((item) =>
             item.productId === productId && item.variant.size === variant.size && item.variant.color === variant.color
                 ? { ...item, quantity }
                 : item
         );
-        dispatch(saveCartThunk(newCart));
+        await dispatch(saveCartThunk(newCart));
+        setLoadingItem(null);
     };
 
     const [showReceipt, setShowReceipt] = React.useState(false);
@@ -32,13 +39,17 @@ const Cart: React.FC = () => {
         return cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
     };
 
-    const handleCheckout = () => {
-        navigate('/checkout', {
-            state: {
-                cartItems,
-                subtotal: calculateSubtotal(),
-            }
-        });
+    const handleCheckout = async () => {
+        setLoadingCheckout(true);
+        setTimeout(() => {
+            setLoadingCheckout(false);
+            navigate('/checkout', {
+                state: {
+                    cartItems,
+                    subtotal: calculateSubtotal(),
+                }
+            });
+        }, 600); // Simulate loading
     };
 
     // Group cart items by productId
@@ -64,11 +75,11 @@ const Cart: React.FC = () => {
             ) : (
                 <div>
                     {Object.entries(grouped).map(([productId, items]) => (
-                        <div key={productId} className="cart-product-card" style={{ background: 'var(--surface)', borderRadius: 8, margin: '1.5rem 0', padding: 20, boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                            <h3 style={{ marginBottom: 8 }}>{items[0].product.name}</h3>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+                        <div key={productId} className="cart-product-card">
+                            <h3>{items[0].product.name}</h3>
+                            <div className="cart-product-variants">
                                 {items.map(item => (
-                                    <div key={item.productId + '-' + item.variant.size + '-' + item.variant.color} style={{ border: '1px solid var(--border-color)', borderRadius: 6, padding: 12, minWidth: 180, background: '#fafbfc' }}>
+                                    <div key={item.productId + '-' + item.variant.size + '-' + item.variant.color} className="cart-product-variant">
                                         <div><b>Variant:</b> Size: {item.variant.size}, Color: {item.variant.color}</div>
                                         <div><b>Price:</b> ${item.product.price.toFixed(2)}</div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '8px 0' }}>
@@ -79,11 +90,17 @@ const Cart: React.FC = () => {
                                                 value={item.quantity}
                                                 min="1"
                                                 onChange={e => handleQuantityChange(item.productId, item.variant, parseInt(e.target.value))}
-                                                style={{ width: 48, padding: 4 }}
+                                                disabled={loadingItem === item.productId + '-' + item.variant.size + '-' + item.variant.color}
                                             />
                                         </div>
-                                        <button className="btn btn-outline" onClick={() => handleRemove(item.productId, item.variant)} style={{ marginTop: 4 }}>Remove</button>
-                                        <div style={{ marginTop: 8, fontWeight: 500 }}>
+                                        <button
+                                            className="btn btn-outline"
+                                            onClick={() => handleRemove(item.productId, item.variant)}
+                                            disabled={loadingItem === item.productId + '-' + item.variant.size + '-' + item.variant.color}
+                                        >
+                                            {loadingItem === item.productId + '-' + item.variant.size + '-' + item.variant.color ? '...' : 'Remove'}
+                                        </button>
+                                        <div className="item-total">
                                             Item Total: ${(item.product.price * item.quantity).toFixed(2)}
                                         </div>
                                     </div>
@@ -94,12 +111,17 @@ const Cart: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                    <div className="subtotal" style={{ textAlign: 'right', marginTop: 24 }}>
+                    <div className="subtotal">
                         <h3>Cart Subtotal: ${calculateSubtotal().toFixed(2)}</h3>
                     </div>
-                    <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0, background: 'var(--surface)', boxShadow: '0 -2px 12px rgba(0,0,0,0.08)', padding: 16, display: 'flex', justifyContent: 'center', zIndex: 100 }}>
-                        <button className="btn btn-primary" style={{ minWidth: 220, fontSize: '1.1rem' }} onClick={handleCheckout}>
-                            Proceed to Checkout
+                    <div className="cart-fixed-checkout">
+                        <button
+                            className="btn btn-primary"
+                            style={{ minWidth: 220, fontSize: '1.1rem' }}
+                            onClick={handleCheckout}
+                            disabled={loadingCheckout}
+                        >
+                            {loadingCheckout ? 'Loading...' : 'Proceed to Checkout'}
                         </button>
                     </div>
                 </div>

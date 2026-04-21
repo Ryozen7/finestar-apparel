@@ -5,7 +5,8 @@ import { clearCartThunk } from '../redux/slices/cartSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from './Button';
 import Input from './Input';
-import './Button.css';
+import '../styles/Button.css';
+import { downloadReceiptPDF } from '../utils/downloadReceiptPDF';
 
 const Checkout: React.FC = () => {
     const location = useLocation();
@@ -15,14 +16,20 @@ const Checkout: React.FC = () => {
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [timestamp, setTimestamp] = useState('');
     const dispatch = useDispatch<AppDispatch>();
+    const [loading, setLoading] = useState(false);
 
     const discount = promo.trim().toUpperCase() === 'SAVE10' ? 0.1 * subtotal : 0;
     const finalTotal = subtotal - discount;
 
     const handlePlaceOrder = async () => {
-        setOrderPlaced(true);
-        setTimestamp(new Date().toLocaleString());
-        await dispatch(clearCartThunk());
+        setLoading(true);
+        // Simulate order processing delay
+        setTimeout(async () => {
+            setOrderPlaced(true);
+            setTimestamp(new Date().toLocaleString());
+            await dispatch(clearCartThunk());
+            setLoading(false);
+        }, 1000);
     };
 
     if (orderPlaced) {
@@ -33,7 +40,26 @@ const Checkout: React.FC = () => {
                 <div>Total: ${subtotal.toFixed(2)}</div>
                 <div>Discount: -${discount.toFixed(2)}</div>
                 <div><b>Final Total: ${finalTotal.toFixed(2)}</b></div>
-                <Button variant="primary" style={{ marginTop: 24 }} onClick={() => navigate('/')}>Back to Store</Button>
+                <Button
+                    variant="secondary"
+                    style={{ marginTop: 16, marginRight: 12 }}
+                    onClick={() => downloadReceiptPDF({
+                        date: timestamp,
+                        subtotal,
+                        discount,
+                        finalTotal,
+                        items: cartItems.map((item: any) => ({
+                            name: item.product.name,
+                            size: item.variant.size,
+                            color: item.variant.color,
+                            price: item.product.price,
+                            quantity: item.quantity
+                        }))
+                    })}
+                >
+                    Download PDF
+                </Button>
+                <Button variant="primary" style={{ marginTop: 16 }} onClick={() => navigate('/')}>Back to Store</Button>
             </div>
         );
     }
@@ -65,7 +91,9 @@ const Checkout: React.FC = () => {
                 <div style={{ fontWeight: 500, margin: '8px 0' }}>Discount: -${discount.toFixed(2)}</div>
                 <p style={{ fontWeight: 700 }}>Final Total: ${finalTotal.toFixed(2)}</p>
             </div>
-            <Button variant="primary" onClick={handlePlaceOrder}>Place Order</Button>
+            <Button variant="primary" onClick={handlePlaceOrder} disabled={loading}>
+                {loading ? 'Placing Order...' : 'Place Order'}
+            </Button>
         </div>
     );
 };

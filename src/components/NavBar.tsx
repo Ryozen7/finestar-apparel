@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaUserCircle, FaBars, FaSun, FaMoon } from 'react-icons/fa';
-import './NavBar.css';
+import '../styles/NavBar.css';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../store';
 import { toggleTheme } from '../redux/slices/themeSlice';
 import Button from './Button';
-import './Button.css';
 
 const NavBar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,26 +20,15 @@ const NavBar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link to="/" className="navbar-logo">Fine Cloth Store</Link>
+        <Link to="/" className="navbar-logo" aria-label="Home">
+          <img src="/logo.png" alt="FineStar Apparel Logo" style={{ height: 40, width: 'auto', display: 'block' }} />
+        </Link>
       </div>
       <div className="navbar-right">
-        <Link to="/cart" className="navbar-cart" title="Cart" style={{ position: 'relative' }}>
+        <Link to="/cart" className="navbar-cart" title="Cart">
           <FaShoppingCart size={22} />
           {cartCount > 0 && (
-            <span style={{
-              position: 'absolute',
-              top: -6,
-              right: -10,
-              background: '#e74c3c',
-              color: 'white',
-              borderRadius: '50%',
-              padding: '2px 7px',
-              fontSize: 12,
-              fontWeight: 700,
-              minWidth: 20,
-              textAlign: 'center',
-              zIndex: 2
-            }}>{cartCount}</span>
+            <span>{cartCount}</span>
           )}
         </Link>
         <Button className="navbar-hamburger" variant="outline" onClick={handleToggleMenu} aria-label="Menu">
