@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { saveCartThunk } from "../redux/slices/cartSlice";
+import "../styles/Cart.css";
 
 const Cart: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
@@ -87,17 +88,7 @@ const Cart: React.FC = () => {
   return (
     <div className="cart">
       {showReceipt && receipt ? (
-        <div
-          className="receipt"
-          style={{
-            background: "var(--surface)",
-            borderRadius: 8,
-            padding: 24,
-            margin: "2rem auto",
-            maxWidth: 420,
-            boxShadow: "0 2px 12px rgba(0,0,0,0.10)",
-          }}
-        >
+        <div className="receipt">
           <h2>Receipt</h2>
           <div>Date: {receipt.timestamp}</div>
           <div>Total: ${receipt.total.toFixed(2)}</div>
@@ -107,7 +98,6 @@ const Cart: React.FC = () => {
           </div>
           <button
             className="btn btn-primary"
-            style={{ marginTop: 24 }}
             onClick={() => setShowReceipt(false)}
           >
             Back to Store
@@ -139,14 +129,7 @@ const Cart: React.FC = () => {
                     <div>
                       <b>Price:</b> ${item.product.price.toFixed(2)}
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        margin: "8px 0",
-                      }}
-                    >
+                    <div className="cart-variant-qty-row">
                       <label
                         htmlFor={`qty-${item.productId}-${item.variant.size}-${item.variant.color}`}
                       >
@@ -202,7 +185,7 @@ const Cart: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: 16, textAlign: "right" }}>
+              <div className="cart-product-subtotal">
                 <b>
                   Product Subtotal: $
                   {items
@@ -217,8 +200,7 @@ const Cart: React.FC = () => {
           </div>
           <div className="cart-fixed-checkout">
             <button
-              className="btn btn-primary"
-              style={{ minWidth: 220, fontSize: "1.1rem" }}
+              className="btn btn-primary cart-checkout-btn"
               onClick={handleCheckout}
               disabled={loadingCheckout}
             >

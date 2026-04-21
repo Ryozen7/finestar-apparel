@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface ThemeState {
-  darkMode: boolean;
-}
+import type { ThemeState } from "../../types";
 
 const initialState: ThemeState = {
   darkMode: false,

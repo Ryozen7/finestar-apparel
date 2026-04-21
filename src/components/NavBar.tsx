@@ -29,11 +29,7 @@ const NavBar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <Link to="/" className="navbar-logo" aria-label="Home">
-          <img
-            src="/logo.png"
-            alt="FineStar Apparel Logo"
-            style={{ height: 40, width: "auto", display: "block" }}
-          />
+            <img src="/logo.png" alt="FineStar Apparel Logo" className="navbar-logo-img" />
         </Link>
       </div>
       <div className="navbar-right">

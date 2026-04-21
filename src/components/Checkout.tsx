@@ -5,7 +5,7 @@ import { clearCartThunk } from "../redux/slices/cartSlice";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
-import "../styles/Button.css";
+import "../styles/Checkout.css";
 import { downloadReceiptPDF } from "../utils/downloadReceiptPDF";
 
 const Checkout: React.FC = () => {
@@ -34,17 +34,7 @@ const Checkout: React.FC = () => {
 
   if (orderPlaced) {
     return (
-      <div
-        className="checkout-receipt"
-        style={{
-          background: "var(--surface)",
-          borderRadius: 8,
-          padding: 24,
-          margin: "2rem auto",
-          maxWidth: 420,
-          boxShadow: "0 2px 12px rgba(0,0,0,0.10)",
-        }}
-      >
+      <div className="checkout-receipt">
         <h2>Order Receipt</h2>
         <div>Date: {timestamp}</div>
         <div>Total: ${subtotal.toFixed(2)}</div>
@@ -54,7 +44,6 @@ const Checkout: React.FC = () => {
         </div>
         <Button
           variant="secondary"
-          style={{ marginTop: 16, marginRight: 12 }}
           onClick={() =>
             downloadReceiptPDF({
               date: timestamp,
@@ -75,7 +64,6 @@ const Checkout: React.FC = () => {
         </Button>
         <Button
           variant="primary"
-          style={{ marginTop: 16 }}
           onClick={() => navigate("/")}
         >
           Back to Store
@@ -97,31 +85,24 @@ const Checkout: React.FC = () => {
           ))}
         </ul>
         <p>Subtotal: ${subtotal.toFixed(2)}</p>
-        <div
-          style={{
-            margin: "12px 0",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
+        <div className="checkout-promo">
           <Input
             type="text"
             placeholder="Promo code"
             value={promo}
             onChange={(e) => setPromo(e.target.value)}
-            style={{ minWidth: 120 }}
+            className="checkout-promo-input"
           />
-          <span style={{ color: discount > 0 ? "green" : "inherit" }}>
+          <span className={discount > 0 ? "checkout-promo-success" : undefined}>
             {discount > 0
               ? "Promo applied: SAVE10 (-10%)"
               : "Enter SAVE10 for 10% off"}
           </span>
         </div>
-        <div style={{ fontWeight: 500, margin: "8px 0" }}>
+        <div className="checkout-discount">
           Discount: -${discount.toFixed(2)}
         </div>
-        <p style={{ fontWeight: 700 }}>Final Total: ${finalTotal.toFixed(2)}</p>
+        <p className="checkout-final">Final Total: ${finalTotal.toFixed(2)}</p>
       </div>
       <Button variant="primary" onClick={handlePlaceOrder} disabled={loading}>
         {loading ? "Placing Order..." : "Place Order"}

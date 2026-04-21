@@ -1,3 +1,19 @@
+.cart-variant-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.cart-product-subtotal {
+  margin-top: 16px;
+  text-align: right;
+}
+
+.cart-checkout-btn {
+  min-width: 220px;
+  font-size: 1.1rem;
+}
 /* Cart Page & Product Card Styles */
 
 .cart-page-container {

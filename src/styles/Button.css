@@ -1,3 +1,8 @@
+.btn-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 6px;
+}
 /* Modern Button Styles */
 
 .btn {

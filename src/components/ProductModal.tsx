@@ -1,15 +1,7 @@
 import React from "react";
 import "../styles/ProductModal.css";
 import Button from "./Button";
-import type { Product, ProductVariant } from "../types";
-
-interface ProductModalProps {
-  product: Product;
-  open: boolean;
-  onClose: () => void;
-  onAdd: (variant: ProductVariant) => void;
-  loading: boolean;
-}
+import type { Product, ProductVariant, ProductModalProps } from "../types";
 
 const ProductModal: React.FC<ProductModalProps> = ({
   product,

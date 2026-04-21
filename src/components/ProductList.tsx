@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "./Input";
 import ProductItem from "./ProductItem";
 import type { Product, ProductVariant } from "../types";
+import "../styles/ProductList.css";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../store";
 import { saveCartThunk, fetchCartThunk } from "../redux/slices/cartSlice";
@@ -104,18 +105,18 @@ const ProductList: React.FC = () => {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+      <div className="product-list-toolbar">
         <Input
           type="text"
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ flex: 1 }}
+          className="product-list-toolbar-input"
         />
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          style={{ padding: 8 }}
+          className="product-list-toolbar-select"
         >
           <option value="name">Name</option>
           <option value="price">Price</option>
@@ -127,7 +128,7 @@ const ProductList: React.FC = () => {
               o === "asc" ? "desc" : "asc",
             )
           }
-          style={{ padding: 8 }}
+          className="product-list-toolbar-button"
         >
           {sortOrder === "asc" ? "↑" : "↓"}
         </button>

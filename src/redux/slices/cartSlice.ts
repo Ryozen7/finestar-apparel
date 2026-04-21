@@ -2,9 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { CartItem, ProductVariant } from "../../types";
 import { fetchCart, saveCart, clearCartApi } from "../api/cartApi";
 
-export interface CartState {
-  items: CartItem[];
-}
+import type { CartState } from "../../types";
 
 const initialState: CartState = {
   items: [],

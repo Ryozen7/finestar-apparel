@@ -1,0 +1,63 @@
+.checkout-promo-input {
+  min-width: 120px;
+}
+/* Checkout component styles */
+
+.checkout {
+  max-width: 480px;
+  margin: 2.5rem auto 0 auto;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+}
+
+.checkout-summary {
+  margin-bottom: 2rem;
+}
+
+.checkout-summary ul {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-summary li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.checkout-promo {
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout-discount {
+  font-weight: 500;
+  margin: 8px 0;
+}
+
+.checkout-final {
+  font-weight: 700;
+}
+
+.checkout-receipt {
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 2rem auto;
+  max-width: 420px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.checkout-receipt .btn {
+  margin-top: 16px;
+  margin-right: 12px;
+}
+
+.checkout-promo-success {
+  color: rgb(46, 192, 46);
+  font-weight: 600;
+  font-size: 0.9rem;
+}

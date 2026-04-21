@@ -1,17 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface MenuItem {
-  id: string;
-  name: string;
-  path: string;
-}
-
-export interface MenuState {
-  items: MenuItem[];
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null;
-}
+import type { MenuItem, MenuState } from "../../types";
 
 const initialState: MenuState = {
   items: [],

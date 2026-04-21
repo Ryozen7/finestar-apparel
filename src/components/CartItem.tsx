@@ -1,20 +1,7 @@
 import React from "react";
 import Button from "./Button";
-import "../styles/Button.css";
-import type { CartItem as CartItemType } from "../types";
-
-interface CartItemProps {
-  item: CartItemType;
-  onRemove: (
-    productId: string,
-    variant: { size: string; color: string },
-  ) => void;
-  onQuantityChange: (
-    productId: string,
-    variant: { size: string; color: string },
-    quantity: number,
-  ) => void;
-}
+import "../styles/CartItem.css";
+import type { CartItemProps } from "../types";
 
 const CartItem: React.FC<CartItemProps> = ({
   item,

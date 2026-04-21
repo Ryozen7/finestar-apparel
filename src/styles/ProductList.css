@@ -1,0 +1,27 @@
+/* ProductList component styles */
+.product-list-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.product-list-toolbar input,
+.product-list-toolbar select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.product-list-toolbar input {
+    flex: 1;
+    max-width: 500px;
+}
+.product-list-toolbar select {
+    width: 150px;
+}
+
+.product-list-toolbar button {
+  padding: 8px 16px;
+}
+.product-list-item {
+  padding: 8px;
+}

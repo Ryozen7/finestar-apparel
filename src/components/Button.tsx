@@ -1,10 +1,6 @@
 import React from "react";
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline";
-  children: React.ReactNode;
-  loading?: boolean;
-}
+import type { ButtonProps } from "../types";
+import "../styles/Button.css";
 
 const Button: React.FC<ButtonProps> = ({
   variant = "primary",
@@ -23,14 +19,7 @@ const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {loading ? (
-        <span
-          className="btn-spinner"
-          style={{
-            display: "inline-block",
-            verticalAlign: "middle",
-            marginRight: 6,
-          }}
-        >
+        <span className="btn-spinner">
           <svg
             width="18"
             height="18"

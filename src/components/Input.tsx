@@ -1,10 +1,6 @@
 import React from "react";
-
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  containerStyle?: React.CSSProperties;
-  labelStyle?: React.CSSProperties;
-}
+import type { InputProps } from "../types";
+import "../styles/Input.css";
 
 const Input: React.FC<InputProps> = ({
   label,
@@ -12,28 +8,13 @@ const Input: React.FC<InputProps> = ({
   labelStyle,
   ...props
 }) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 4,
-      ...containerStyle,
-    }}
-  >
+  <div className="input-container" style={containerStyle}>
     {label && (
-      <label style={{ fontWeight: 500, marginBottom: 2, ...labelStyle }}>
+      <label className="input-label" style={labelStyle}>
         {label}
       </label>
     )}
-    <input
-      {...props}
-      style={{
-        padding: 8,
-        borderRadius: 4,
-        border: "1px solid #ccc",
-        ...props.style,
-      }}
-    />
+    <input {...props} className="input-field" style={props.style} />
   </div>
 );
 
