@@ -12,7 +12,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ product, onAddToCart }) => {
   return (
     <div className="product-item">
       <h2>{product.name}</h2>
-      {/* <p>{product.description}</p> */}
+      <p>Category: {product.category}</p>
       <p>Price: ${product.price.toFixed(2)}</p>
       <Button variant="primary" onClick={() => onAddToCart(product)}>Add to Cart</Button>
     </div>

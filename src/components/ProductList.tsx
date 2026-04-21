@@ -6,6 +6,7 @@ const ProductList: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -43,11 +44,30 @@ const ProductList: React.FC = () => {
         console.log('Add to cart:', product);
     };
 
+    // Fuzzy search filter
+    const filteredProducts = products.filter((product) => {
+        const q = search.toLowerCase();
+        return (
+            product.name.toLowerCase().includes(q) ||
+            product.category.toLowerCase().includes(q) ||
+            product.price.toString().toLowerCase().includes(q)
+        );
+    });
+
     return (
-        <div className="product-list">
-            {products.map(product => (
-                <ProductItem key={product.id} product={product} onAddToCart={onAddToCart} />
-            ))}
+        <div>
+            <input
+                type="text"
+                placeholder="Search products..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                style={{ marginBottom: 16, padding: 8, width: '100%' }}
+            />
+            <div className="product-list">
+                {filteredProducts.map(product => (
+                    <ProductItem key={product.id} product={product} onAddToCart={onAddToCart} />
+                ))}
+            </div>
         </div>
     );
 };
